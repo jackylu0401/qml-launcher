@@ -8,6 +8,7 @@
 #include <QIcon>
 #include <QDirIterator>
 #include <QSettings>
+#include <QRegularExpression>
 
 #include "imageprovider.h"
 #include "process.h"
@@ -55,7 +56,7 @@ QVariantList createAppsList(const QString &path) {
                 continue;
         
         AppInfo app;
-        app.exec = desktopFile.value("Exec").toString().remove("\"").remove(QRegExp(" %."));
+        app.exec = desktopFile.value("Exec").toString().remove("\"").remove(QRegularExpression(" %.*"));
         app.icon = desktopFile.value("Icon", "application").toString();
         app.name = desktopFile.value("Name").toString();
 
