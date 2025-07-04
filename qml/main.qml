@@ -1,18 +1,21 @@
-import QtQuick 2.7
-import QtQuick.Controls 2.0
-import QtQuick.Layouts 1.3
-import QtQuick.Window 2.2
-import QtQuick.Controls.Material 2.1
+import QtQuick 2.15
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Window
+import QtQuick.Controls.Material
 
 ApplicationWindow {
     visible: true
     width: Screen.width
     height: Screen.height
     visibility: Window.FullScreen
-    flags: Qt.BypassWindowManagerHint | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
+    flags: Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
+
+    Material.theme: Material.Dark
+    Material.accent: Material.DeepPurple
 
     color: "transparent"
-    background: Rectangle{
+    background: Rectangle {
         color: "black"
         opacity: 0.666
     }
@@ -22,7 +25,7 @@ ApplicationWindow {
 
     header: ToolBar {
         height: rootWindow.height * 0.1
-        background: Item{}
+        background: Rectangle { color: "transparent" }
 
         TextField {
             id: searchField
@@ -33,9 +36,7 @@ ApplicationWindow {
             }
 
             width: rootWindow.width * 0.16
-            onTextEdited: {
-                refresh()
-            }
+            onTextEdited: refresh()
 
             Keys.onEscapePressed: Qt.quit()
             Keys.onDownPressed: swipeView.forceActiveFocus()
@@ -59,7 +60,7 @@ ApplicationWindow {
         return false;
     }
 
-    function refresh(){
+    function refresh() {
         var page = 0
         var itemsPerPage = 24
         console.log(searchField.text)
@@ -84,21 +85,23 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-        x= Qt.application.screens[0].virtualX
+        x = Qt.application.screens[0].virtualX
         refresh()
         searchField.forceActiveFocus()
     }
 
     SwipeView {
-        Keys.onEscapePressed: Qt.quit()
         id: swipeView
         anchors.fill: parent
+        focus: true
 
         property int selectedIndex: 0
 
         function select(index) {
             selectedIndex = index
         }
+
+        Keys.onEscapePressed: Qt.quit()
 
         Keys.onUpPressed: {
             var place = selectedIndex - rootWindow.columns
@@ -115,6 +118,7 @@ ApplicationWindow {
         Keys.onRightPressed: {
             selectedIndex = Math.min(selectedIndex + 1, currentItem.count() - 1)
         }
+
         Keys.onLeftPressed: {
             selectedIndex = Math.max(0, selectedIndex - 1)
         }
@@ -159,7 +163,7 @@ ApplicationWindow {
                         id: trans
                         SequentialAnimation {
                             NumberAnimation {
-                                properties: "opacity";
+                                properties: "opacity"
                                 from: 1
                                 to: 0
                                 duration: 0
@@ -170,14 +174,14 @@ ApplicationWindow {
                             }
                             ParallelAnimation {
                                 NumberAnimation {
-                                    properties: "opacity";
+                                    properties: "opacity"
                                     from: 0
                                     to: 1
                                     duration: 600
                                     easing.type: Easing.OutCubic
                                 }
                                 NumberAnimation {
-                                    properties: "y";
+                                    properties: "y"
                                     from: trans.ViewTransition.destination.y + 50
                                     duration: 620
                                     easing.type: Easing.OutCubic
@@ -195,12 +199,8 @@ ApplicationWindow {
                             width: height
                             padding: 10
                             selected: swipeView.selectedIndex === index
-                            onHovered: {
-                                swipeView.select(index)
-                            }
-                            onClicked: {
-                                exec(app[2])
-                            }
+                            onHovered: swipeView.select(index)
+                            onClicked: exec(app[2])
                         }
                     }
                 }
@@ -211,12 +211,13 @@ ApplicationWindow {
     function exec(program) {
         console.debug("Exec: " + program)
         proc.start(program)
-        Qt.quit();
+        Qt.quit()
     }
 
     footer: ToolBar {
-        background: Item{}
+        background: Rectangle { color: "transparent" }
         height: rootWindow.height * 0.05
+
         PageIndicator {
             count: swipeView.count
             currentIndex: swipeView.currentIndex
