@@ -1,6 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QDebug>
 
 #include <QProcess>
 #include <QFile>
@@ -74,10 +75,10 @@ QVariantList apps() {
 }
 
 int main(int argc, char *argv[]) {
-    qputenv("QT_QUICK_CONTROLS_STYLE", "material");
-
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
+
+    qDebug() << "Starting qml-launcher (modified version)...";
 
     QQmlApplicationEngine engine;
     engine.addImageProvider("icons", new ImageProvider());

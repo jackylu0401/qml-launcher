@@ -1,8 +1,7 @@
 import QtQuick 2.15
-import QtQuick.Controls
+import QtQuick.Controls 2.15
 import QtQuick.Layouts
 import QtQuick.Window
-import QtQuick.Controls.Material
 
 ApplicationWindow {
     visible: true
@@ -11,8 +10,6 @@ ApplicationWindow {
     visibility: Window.FullScreen
     flags: Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
 
-    Material.theme: Material.Dark
-    Material.accent: Material.DeepPurple
 
     color: "transparent"
     background: Rectangle {
@@ -199,8 +196,6 @@ ApplicationWindow {
                             width: height
                             padding: 10
                             selected: swipeView.selectedIndex === index
-                            onHovered: swipeView.select(index)
-                            onClicked: exec(app[2])
                         }
                     }
                 }

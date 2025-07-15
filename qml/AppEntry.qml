@@ -1,7 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
-import QtQuick.Controls.Material 2.1
 
 
 Pane {
@@ -15,20 +14,12 @@ Pane {
         color: "black"
     }
 
-    signal hovered()
-    signal clicked()
+    onHoveredChanged: if (hovered) root.parent.swipeView.select(index)
+    onClicked: root.parent.exec(app[2])
 
     MouseArea {
-        id: mArea
         anchors.fill: parent
         hoverEnabled: true
-        onHoveredChanged: {
-            if (hovered)
-                root.hovered()
-        }
-        onClicked: {
-            root.clicked()
-        }
     }
 
     Column {
